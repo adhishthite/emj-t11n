@@ -1,17 +1,19 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Emoji Translation App 🎉
+
+This is an Emoji Translation app that takes user input and "translates" it into emojis for fun and expressive communication!
+
+## Tech Stack
+
+- [Next.js](https://nextjs.org) - React framework
+- [ShadCN/UI](https://ui.shadcn.com) - UI components
+- [pnpm](https://pnpm.io) - Package manager
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
