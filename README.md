@@ -1,38 +1,78 @@
 # Emoji Translation App 🎉
 
-This is an Emoji Translation app that takes user input and "translates" it into emojis for fun and expressive communication!
+Translate text into expressive emoji strings with smart model routing and a lightweight, fast UI.
 
-## Tech Stack
+## Stack
 
-- [Next.js](https://nextjs.org) - React framework
-- [ShadCN/UI](https://ui.shadcn.com) - UI components
-- [pnpm](https://pnpm.io) - Package manager
+- Next.js App Router + TypeScript (strict)
+- shadcn/ui + Tailwind v4
+- Vercel AI SDK (`ai`, `@ai-sdk/google`, `@ai-sdk/openai`)
 
-## Getting Started
+## Run
 
-First, run the development server:
+Install deps and start dev server:
 
 ```bash
+pnpm i
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Lint/format:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm lint
+pnpm format
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment
 
-## Learn More
+Add `.env.local` (not committed):
 
-To learn more about Next.js, take a look at the following resources:
+```
+# smart routing fallback when detection is unavailable
+DEFAULT_PROVIDER=gemini  # or openai
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Gemini (use either key var)
+GEMINI_API_KEY=xxxx
+# or GOOGLE_API_KEY=xxxx
+GEMINI_MODEL=gemini-2.5-flash-lite
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# OpenAI (optional; used for non‑English)
+OPENAI_API_KEY=xxxx
+OPENAI_MODEL=gpt-4o-mini
+```
 
-## Deploy on Vercel
+## Smart Routing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Gemini detects language (ISO 639‑1). If English → translate with Gemini; otherwise → OpenAI.
+- If keys are missing or detection fails, the server falls back to `DEFAULT_PROVIDER` or a local dictionary.
+- Temperature 0.9; max 75 tokens; input length capped at 100.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## API
+
+- `POST /api/translate` with JSON `{ text: string }`
+- Returns `{ output, provider, source }` where `source` is `ai|local`.
+- Rate limit: 3 requests/minute per IP (in‑memory, best‑effort; use a shared store like Upstash in production).
+- Structured logs to stdout, e.g.:
+
+```json
+{"event":"translate","ip":"abc1234...","duration_ms":120,"provider":"gemini","source":"ai","lang":"en","rate_limited":false}
+```
+
+## Security
+
+- Security headers enabled (X‑Frame‑Options, X‑Content‑Type‑Options, Referrer‑Policy, Permissions‑Policy).
+- Lightweight CSP via `next.config.ts` (default-src self; style/script safe allowances; frame-ancestors none; connect-src self).
+- Secrets remain server‑only; `.env*` are already gitignored.
+
+## UX Notes
+
+- Sticky header/footer; translator panel sticks under header and compacts on scroll.
+- Input: placeholder instructions, Enter to submit (Shift+Enter newline), 100‑char counter, non‑resizable.
+- History: last 50, clickable to refill input, clearable, persists in `localStorage`.
+
+## Future Enhancements
+
+- Move rate limiting to Redis/Upstash for horizontal scaling.
+- Optional provider badge in UI with detected language.
+- Add CSP report‑only pipeline before hardening.
