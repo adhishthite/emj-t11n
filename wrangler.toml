@@ -1,14 +1,7 @@
-name = "emojis"
-compatibility_date = "2025-09-04"
-
-[env.production]
-name = "emojis"
-
-[env.preview]
-name = "emojis-preview"
-
 # Pages configuration
-pages_build_output_dir = "out"
+pages_build_output_dir = ".vercel/output/static"
+compatibility_date = "2025-09-04"
+compatibility_flags = ["nodejs_compat"]
 
 # Environment variables (these will need to be set in Cloudflare dashboard)
 # [vars]
