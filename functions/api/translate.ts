@@ -1,5 +1,5 @@
 import { generateText } from 'ai';
-import { openai } from '@ai-sdk/openai';
+import { openai as openaiDefault, createOpenAI } from '@ai-sdk/openai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 
 type ReqBody = {
@@ -171,8 +171,12 @@ Text: ${input}`;
     if (routeProvider === 'openai') {
       const modelName = env.OPENAI_MODEL || 'gpt-4o-mini';
       try {
+        // Prefer explicit API key from env when running in functions
+        const openaiClient = env.OPENAI_API_KEY
+          ? createOpenAI({ apiKey: env.OPENAI_API_KEY })
+          : openaiDefault;
         const { text: aiOut } = await generateText({
-          model: openai(modelName, { apiKey: env.OPENAI_API_KEY }),
+          model: openaiClient(modelName),
           prompt,
           temperature: 0.9,
           maxOutputTokens: 75,
