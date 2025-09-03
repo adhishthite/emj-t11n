@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "deploy": "wrangler pages deploy out",
+    "deploy:preview": "wrangler pages deploy out --env preview"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.11",

@@ -1,0 +1,22 @@
+name = "emojis"
+compatibility_date = "2025-09-04"
+
+[env.production]
+name = "emojis"
+
+[env.preview]
+name = "emojis-preview"
+
+# Pages configuration
+pages_build_output_dir = "out"
+
+# Environment variables (these will need to be set in Cloudflare dashboard)
+# [vars]
+# DEFAULT_PROVIDER = "gemini"
+# GEMINI_MODEL = "gemini-2.5-flash-lite"
+# OPENAI_MODEL = "gpt-4o-mini"
+
+# Secrets (set via: wrangler secret put GEMINI_API_KEY)
+# GEMINI_API_KEY
+# GOOGLE_API_KEY
+# OPENAI_API_KEY
