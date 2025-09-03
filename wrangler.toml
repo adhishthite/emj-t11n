@@ -1,7 +1,7 @@
 # Pages configuration
 name = "emojis"
 pages_build_output_dir = ".vercel/output/static"
-compatibility_date = "2025-09-04"
+compatibility_date = "2025-09-03"
 compatibility_flags = ["nodejs_compat"]
 
 # Environment variables (these will need to be set in Cloudflare dashboard)
